@@ -132,6 +132,8 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+vim.keymap.set('n', 'C-J', '<cmd>:cnext<CR>')
+vim.keymap.set('n', 'C-K', '<cmd>:cprev<CR>')
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -238,11 +240,57 @@ require('lazy').setup({
     },
   },
 
-  -- **and UndoTree here:**
+  -- UndoTree
   {
     'mbbill/undotree',
     keys = {
       { '<leader>u', vim.cmd.UndotreeToggle, desc = 'Toggle Undo Tree' },
+    },
+  },
+  --vim-fugitive
+  {
+    'tpope/vim-fugitive',
+    -- lazy‑load on any of these commands:
+    cmd = { 'Git', 'Gstatus', 'Gblame', 'Gdiffsplit', 'Gread', 'Gwrite' },
+    keys = {
+      { '<leader>gs', ':Git<CR>', desc = 'Fugitive: status' },
+      { '<leader>gd', ':Gvdiffsplit<CR>', desc = 'Fugitive: vertical diff' },
+      { '<leader>gb', ':Gblame<CR>', desc = 'Fugitive: blame' },
+    },
+    -- you can also pass opts if you want to call setup():
+    -- opts = {},
+  },
+  {
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    cmd = { 'Trouble', 'TroubleToggle', 'TroubleRefresh' },
+    keys = {
+      -- simple toggle
+      { '<leader>xx', '<cmd>Trouble<CR>', desc = 'Trouble: Toggle' },
+      -- diagnostics for the current buffer
+      { '<leader>xd', '<cmd>TroubleToggle document_diagnostics<CR>', desc = 'Trouble: Document Diagnostics' },
+      -- all workspace diagnostics
+      { '<leader>xw', '<cmd>TroubleToggle workspace_diagnostics<CR>', desc = 'Trouble: Workspace Diagnostics' },
+      -- quickfix / loclist
+      { '<leader>xq', '<cmd>Trouble quickfix<CR>', desc = 'Trouble: QuickFix' },
+      { '<leader>xl', '<cmd>Trouble loclist<CR>', desc = 'Trouble: Location List' },
+      { '[t', '<cmd>TroublePrevious<CR>', desc = 'Trouble: Previous item' },
+      { ']t', '<cmd>TroubleNext<CR>', desc = 'Trouble: Next item' },
+      {
+        '<leader>fq',
+        function()
+          -- 1) Populate Trouble's quickfix list (this also sets Vim's qf-list)
+          vim.cmd 'Trouble quickfix'
+
+          -- 2) Launch Telescope on that quickfix list
+          require('telescope.builtin').quickfix()
+        end,
+        desc = 'Trouble → Telescope Quickfix',
+      },
+    },
+    opts = {
+      -- any Trouble.setup() opts go here
+      auto_preview = false,
     },
   },
 
@@ -367,8 +415,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>pf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
@@ -915,8 +966,6 @@ require('lazy').setup({
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
-  -- require 'kickstart.plugins.harpoon',
-  -- require 'kickstart.plugins.undotree',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
