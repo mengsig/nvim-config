@@ -1,5 +1,4 @@
-return require('lazy').setup {
-  --undotree
+return {
   {
     'mbbill/undotree',
     keys = {

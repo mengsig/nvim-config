@@ -1,17 +1,16 @@
-return require('lazy').setup {
-  -- Harpoon
+return {
   {
     'ThePrimeagen/harpoon',
     keys = {
       {
-        '<leader>hm',
+        '<leader>a',
         function()
           require('harpoon.mark').add_file()
         end,
         desc = 'Harpoon: add file',
       },
       {
-        '<leader>hl',
+        '<C-e>',
         function()
           require('harpoon.ui').toggle_quick_menu()
         end,
@@ -33,14 +32,4 @@ return require('lazy').setup {
       },
     },
   },
-
-  -- UndoTree
-  {
-    'mbbill/undotree',
-    keys = {
-      { '<leader>u', vim.cmd.UndotreeToggle, desc = 'Toggle Undo Tree' },
-    },
-  },
-
-  -- …any other plugins…
 }
