@@ -4,6 +4,9 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- color stuff
+vim.opt.termguicolors = true
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -116,8 +119,6 @@ vim.keymap.set('n', '<leader>v', '<cmd>split<CR><C-w><C-w><cmd>:terminal<CR>')
 vim.keymap.set('n', '<leader>wq', '<cmd>q<CR>')
 
 vim.keymap.set('n', '<leader>pb', '<cmd>:e#<CR>')
-vim.api.nvim_create_user_command('FTermToggle', require('FTerm').toggle, { bang = true })
-vim.keymap.set('n', '<leader>t', '<cmd>FTermToggle<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message.' })
